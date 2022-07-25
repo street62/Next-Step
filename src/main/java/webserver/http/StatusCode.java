@@ -1,8 +1,8 @@
-package webserver.response;
+package webserver.http;
 
 public enum StatusCode {
     OK(200),
-    REDIRECT(302);
+    FOUND(302);
 
 
     private int codeNumber;

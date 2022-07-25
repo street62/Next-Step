@@ -7,9 +7,9 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.request.Request;
-import webserver.response.Response;
-import webserver.response.ResponseMaker;
+import webserver.http.Request;
+import webserver.http.Response;
+import webserver.http.ResponseMaker;
 
 public class RequestHandler extends Thread {
     private static final Logger log = LoggerFactory.getLogger(RequestHandler.class);
@@ -41,8 +41,7 @@ public class RequestHandler extends Thread {
     }
 
     public Request readRequest() throws IOException {
-        String firstLine = br.readLine();
-        Request request = new Request(firstLine);
+        Request request = new Request(br);
         request.setParams(parseParams());
         log.debug("method: {}, uri: {}", request.getMethod(), request.getUri());
         return request;

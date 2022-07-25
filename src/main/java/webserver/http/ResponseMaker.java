@@ -1,8 +1,7 @@
-package webserver.response;
+package webserver.http;
 
 import webserver.logicexecutor.LogicExecutor;
 import webserver.logicexecutor.LoginLogicExecutor;
-import webserver.request.Request;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,7 +20,7 @@ public class ResponseMaker {
     public Response getResponse(Request request) {
         if (mapper.containsKey(request.getUri())) {
             LogicExecutor logicExecutor = mapper.get(request.getUri());
-            return logicExecutor.run(request);
+            return logicExecutor.execute(request);
         }
         try {
             byte[] body = Files.readAllBytes(new File("./webapp" + request.getUri()).toPath());

@@ -1,8 +1,8 @@
 package webserver.logicexecutor;
 
-import webserver.request.Request;
-import webserver.response.Response;
+import webserver.http.Request;
+import webserver.http.Response;
 
 public interface LogicExecutor {
-    Response run(Request request);
+    Response execute(Request request);
 }
