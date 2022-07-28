@@ -4,38 +4,44 @@ import util.HttpRequestUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 public class Request {
     private String method;
     private String uri;
-    private Map<String, String> headers;
-    private Map<String, String> params;
+    private Map<String, String> headers = new HashMap<>();
+    private Map<String, String> params = new HashMap<>();
 
     public Request(BufferedReader br) throws IOException {
         parseRequestLine(br);
         parseHeader(br);
-        parseParams(br);
+        parseParamsInBody(br);
     }
 
-    private void parseParams(BufferedReader br) throws IOException {
-        String paramsString = br.readLine();
-        if (paramsString.length() != 0) {
-            this.params = HttpRequestUtils.parseQueryString(paramsString);
+    private void parseParamsInBody(BufferedReader br) throws IOException {
+        if (!headers.containsKey("content-length")) {
+            return;
         }
+        char[] params = new char[Integer.parseInt(headers.get("content-length"))];
+        this.params = HttpRequestUtils.parseQueryString(String.valueOf(params));
     }
 
     private void parseHeader(BufferedReader br) throws IOException {
-        StringBuilder sb = new StringBuilder();
         String line = br.readLine();
-        while (line.length() != 0) {
-            sb.append(line);
+        while (line != null && line.length() != 0) {
+            HttpRequestUtils.Pair pair = HttpRequestUtils.parseHeader(line);
+            headers.put(pair.getKey(), pair.getValue());
+            line = br.readLine();
         }
-        String headerString = sb.toString();
     }
 
     private void parseRequestLine(BufferedReader br) throws IOException {
-        String[] requestLine = br.readLine().split(" ");
+        String line = br.readLine();
+        if (line == null) {
+            return;
+        }
+        String[] requestLine = line.split(" ");
         this.method = requestLine[0];
         String uri = requestLine[1];
         if (hasUriQuery(uri)) {
@@ -61,7 +67,15 @@ public class Request {
         this.params = params;
     }
 
+    public String getParam(String key) {
+        return params.get(key);
+    }
+
     public Map<String, String> getParams() {
-        return params;
+        return new HashMap<>(params);
+    }
+
+    public String getHeaders(String key) {
+        return headers.get(key);
     }
 }

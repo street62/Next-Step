@@ -2,6 +2,7 @@ package webserver;
 
 import java.io.*;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,10 +31,11 @@ public class RequestHandler extends Thread {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             dos = new DataOutputStream(out);
             br = new BufferedReader(new InputStreamReader(in));
+
             Request request = readRequest();
             Response response = makeResponseOf(request);
-
             sendResponse(response);
+
             br.close();
         } catch (IOException e) {
             log.error(e.getMessage());
@@ -42,25 +44,8 @@ public class RequestHandler extends Thread {
 
     public Request readRequest() throws IOException {
         Request request = new Request(br);
-        request.setParams(parseParams());
-        log.debug("method: {}, uri: {}", request.getMethod(), request.getUri());
+        log.debug("Request: {} {}", request.getMethod(), request.getUri());
         return request;
-    }
-
-    private Map<String, String> parseParams() throws IOException {
-        Map<String, String> params = new HashMap<>();
-        String line = br.readLine();
-        while (line.length() != 0 && !(line.equals("\r\n"))) {
-            log.debug(line);
-            line = br.readLine();
-        }
-        if (line.length() != 0) {
-            String[] paramsString = br.readLine().split("&");
-            for (String param : paramsString) {
-                params.put(param.split("=")[0], param.split("=")[1]);
-            }
-        }
-        return params;
     }
 
     public Response makeResponseOf(Request request) {
