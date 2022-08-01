@@ -1,13 +1,18 @@
 package webserver.http;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import util.HttpRequestUtils;
+import webserver.RequestHandler;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+
 public class Request {
+    private static final Logger log = LoggerFactory.getLogger(RequestHandler.class);
     private String method;
     private String uri;
     private Map<String, String> headers = new HashMap<>();
@@ -20,19 +25,26 @@ public class Request {
     }
 
     private void parseParamsInBody(BufferedReader br) throws IOException {
-        if (!headers.containsKey("content-length")) {
+        if (!headers.containsKey("Content-Length")) {
+            log.info("doesn't have Content-Length");
             return;
         }
-        char[] params = new char[Integer.parseInt(headers.get("content-length"))];
+        int contentLength = Integer.parseInt(headers.get("Content-Length"));
+        char[] params = new char[contentLength];
+
+        br.read(params, 0, contentLength);
         this.params = HttpRequestUtils.parseQueryString(String.valueOf(params));
+        log.info("params: {}", String.valueOf(params));
     }
 
     private void parseHeader(BufferedReader br) throws IOException {
         String line = br.readLine();
+        log.info(line);
         while (line != null && line.length() != 0) {
             HttpRequestUtils.Pair pair = HttpRequestUtils.parseHeader(line);
             headers.put(pair.getKey(), pair.getValue());
             line = br.readLine();
+            log.info(line);
         }
     }
 
