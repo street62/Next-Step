@@ -26,7 +26,6 @@ public class Request {
 
     private void parseParamsInBody(BufferedReader br) throws IOException {
         if (!headers.containsKey("Content-Length")) {
-            log.info("doesn't have Content-Length");
             return;
         }
         int contentLength = Integer.parseInt(headers.get("Content-Length"));
@@ -39,12 +38,10 @@ public class Request {
 
     private void parseHeader(BufferedReader br) throws IOException {
         String line = br.readLine();
-        log.info(line);
         while (line != null && line.length() != 0) {
             HttpRequestUtils.Pair pair = HttpRequestUtils.parseHeader(line);
             headers.put(pair.getKey(), pair.getValue());
             line = br.readLine();
-            log.info(line);
         }
     }
 
