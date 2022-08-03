@@ -54,8 +54,7 @@ public class RequestHandler extends Thread {
 
     public void sendResponse(Response response) {
         try {
-            dos.write(response.getHeader());
-            dos.write(response.getBody());
+            dos.write(response.getAsByteArray());
         } catch (IOException e) {
             log.error(e.getMessage());
         }

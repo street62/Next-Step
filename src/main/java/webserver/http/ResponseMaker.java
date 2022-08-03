@@ -1,7 +1,7 @@
 package webserver.http;
 
 import webserver.logicexecutor.LogicExecutor;
-import webserver.logicexecutor.LoginLogicExecutor;
+import webserver.logicexecutor.RegisterLogicExecutor;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,7 +14,7 @@ public class ResponseMaker {
     private final Map<String, LogicExecutor> mapper = new HashMap<>();
 
     public ResponseMaker() {
-        mapper.put("/user/create", new LoginLogicExecutor());
+        mapper.put("/user/create", new RegisterLogicExecutor());
     }
 
     public Response getResponse(Request request) {
@@ -26,7 +26,7 @@ public class ResponseMaker {
             byte[] body = Files.readAllBytes(new File("./webapp" + request.getUri()).toPath());
             return new Response(StatusCode.OK, body);
         } catch (IOException e) {
-            return new Response(StatusCode.OK, "헬로우 월드!".getBytes(StandardCharsets.UTF_8));
+            return new Response(StatusCode.OK, "헬로우 월드!");
         }
     }
 }
