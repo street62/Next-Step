@@ -2,9 +2,9 @@ package webserver.logicexecutor;
 
 import db.DataBase;
 import model.User;
-import webserver.http.FoundResponse;
-import webserver.http.Request;
-import webserver.http.Response;
+import webserver.http.response.FoundResponse;
+import webserver.http.request.Request;
+import webserver.http.response.Response;
 
 public class RegisterLogicExecutor implements LogicExecutor {
     @Override

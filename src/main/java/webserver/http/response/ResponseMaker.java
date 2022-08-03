@@ -1,11 +1,11 @@
-package webserver.http;
+package webserver.http.response;
 
+import webserver.http.request.Request;
 import webserver.logicexecutor.LogicExecutor;
 import webserver.logicexecutor.RegisterLogicExecutor;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;

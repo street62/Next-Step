@@ -2,15 +2,12 @@ package webserver;
 
 import java.io.*;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.http.Request;
-import webserver.http.Response;
-import webserver.http.ResponseMaker;
+import webserver.http.request.Request;
+import webserver.http.response.Response;
+import webserver.http.response.ResponseMaker;
 
 public class RequestHandler extends Thread {
     private static final Logger log = LoggerFactory.getLogger(RequestHandler.class);
