@@ -23,7 +23,7 @@ public class ResponseMaker {
             return logicExecutor.execute(request);
         }
         try {
-            byte[] body = Files.readAllBytes(new File("./webapp" + request.getUri()).toPath());
+            String body = Files.readString(new File("./webapp" + request.getUri()).toPath());
             return new Response(StatusCode.OK, body);
         } catch (IOException e) {
             return new Response(StatusCode.OK, "헬로우 월드!");
